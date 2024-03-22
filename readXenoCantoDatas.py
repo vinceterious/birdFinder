@@ -6,7 +6,6 @@ import retrieveXenoCantoAPISampleList
 class ReadXenoCantoData:
     r = retrieveXenoCantoAPISampleList.RetrieveXenoCantoAPISampleList()
     downloadFile = {}
-
     def readFileByFile(self):
         dir = self.r.directoryJson
         filename = self.r.filename
@@ -27,6 +26,7 @@ class ReadXenoCantoData:
                 print(espece + "," + sousEspece + "," + str(len(files)))
     
     def downloadExtractSoundForCorvusAndColumbus(self):
+        #temporary hard code
         espece = "Passer"
         sousEspece = "domesticus"
         for idx in range(1,21):

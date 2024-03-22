@@ -9,7 +9,6 @@ class RetrieveXenoCantoAPISampleList:
     directoryJson = "xenocantoApiResult"
     dirSound = "xenocantoSound"
     filename = "sample"
-
     def requestXenoCanto(self, url, verbose=False):
         r = requests.get(url)
         if verbose:
@@ -45,14 +44,14 @@ class RetrieveXenoCantoAPISampleList:
             samples = json.loads(rootR.text)
             numOfRequest = samples["numPages"]
             for idx in range(2, numOfRequest + 1):
-                time.sleep(1) #Xeno canto API take  max 1 requete by sec
+                time.sleep(1) #Xeno canto API take  max 1 request by sec
                 r = self.requestOnePageFromXenoCanto(idx, True)
                 if r != None:
                     self.writeOnePageFromXenoCanto(idx, r)
         return 0
 
     def downloadOneFile(self, url, path, filename ):
-        time.sleep(1) #Xeno canto API take  max 1 requete by sec
+        time.sleep(1) #Xeno canto API take  max 1 request by sec
         absPath = self.dirSound + "/" + path
         if not os.path.exists( absPath ):
             os.makedirs(absPath )
@@ -62,7 +61,6 @@ class RetrieveXenoCantoAPISampleList:
             with open(fileToWrite, "wb") as f:
                 f.write(r.content)
                 f.close()
-
 
 def main():
     r = RetrieveXenoCantoAPISampleList()
