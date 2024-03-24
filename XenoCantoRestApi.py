@@ -5,10 +5,11 @@ import time
 import os
 from http.client import responses
 
-class RetrieveXenoCantoAPISampleList:
+class XenoCantoRestApi:
     directoryJson = "xenocantoApiResult"
     dirSound = "xenocantoSound"
     filename = "sample"
+
     def requestXenoCanto(self, url, verbose=False):
         r = requests.get(url)
         if verbose:
@@ -50,6 +51,16 @@ class RetrieveXenoCantoAPISampleList:
                     self.writeOnePageFromXenoCanto(idx, r)
         return 0
 
+    def downloadExtractSoundForCorvus(self):
+        #temporary hard code
+        espece = "Corvus"
+        sousEspece = "corone"
+        for idx in range(1,21):
+            path = espece + "/" + sousEspece
+            url = self.downloadFile[espece][sousEspece][idx]
+            fName = str(idx) + ".mp3"
+            self.r.downloadOneFile(url, path, fName)
+
     def downloadOneFile(self, url, path, filename ):
         time.sleep(1) #Xeno canto API take  max 1 request by sec
         absPath = self.dirSound + "/" + path
@@ -63,7 +74,7 @@ class RetrieveXenoCantoAPISampleList:
                 f.close()
 
 def main():
-    r = RetrieveXenoCantoAPISampleList()
+    r = XenoCantoRestApi()
     return r.retrieveXenoCantoAPISampleList()
 
 if __name__ == '__main__':
