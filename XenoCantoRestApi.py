@@ -4,6 +4,7 @@ import json
 import time
 import os
 from http.client import responses
+from tqdm import tqdm
 
 class XenoCantoRestApi:
     directoryJson = "xenocantoApiResult"
@@ -51,6 +52,18 @@ class XenoCantoRestApi:
                     self.writeOnePageFromXenoCanto(idx, r)
         return 0
 
+    def downloadAllFilesFound(self, mapOfAllFile):
+        for espece, sousEspecesFiles in tqdm(mapOfAllFile.items()):
+            for sousEspece, files in tqdm(sousEspecesFiles.items(), leave=False):
+                idx=0
+                for file in tqdm(files, leave=False):
+                    if idx < 30:
+                        path = espece + "/" + sousEspece
+                        url = file
+                        fName = str(idx) + ".mp3"
+                        self.downloadOneFile(url, path, fName)
+                        idx+=1
+
     def downloadExtractSoundForCorvus(self):
         #temporary hard code
         espece = "Corvus"
@@ -59,14 +72,14 @@ class XenoCantoRestApi:
             path = espece + "/" + sousEspece
             url = self.downloadFile[espece][sousEspece][idx]
             fName = str(idx) + ".mp3"
-            self.r.downloadOneFile(url, path, fName)
+            self.downloadOneFile(url, path, fName)
 
     def downloadOneFile(self, url, path, filename ):
-        time.sleep(1) #Xeno canto API take  max 1 request by sec
+        time.sleep(0.1) #Xeno canto API take  max 1 request by sec
         absPath = self.dirSound + "/" + path
         if not os.path.exists( absPath ):
             os.makedirs(absPath )
-        r = self.requestXenoCanto(url, True)
+        r = self.requestXenoCanto(url, False)
         if r != None:
             fileToWrite = absPath + "/" + filename
             with open(fileToWrite, "wb") as f:
@@ -75,7 +88,7 @@ class XenoCantoRestApi:
 
 def main():
     r = XenoCantoRestApi()
-    return r.retrieveXenoCantoAPISampleList()
+    #map = r.retrieveXenoCantoAPISampleList()
 
 if __name__ == '__main__':
     sys.exit(main())

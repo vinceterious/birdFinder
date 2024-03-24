@@ -25,17 +25,16 @@ class XenoCantoRestJsonApiResult:
                 recordData = json.load(f)["recordings"]
                 for entry in recordData:
                     self.constructMetadataDico(mapOfDowloadUrls, entry)
-        for espece, sousEspeces in mapOfDowloadUrls.items():
-            for sousEspece, files in sousEspeces.items():
-                print(espece + "," + sousEspece + "," + str(len(files)))
+        #for espece, sousEspeces in mapOfDowloadUrls.items():
+            #for sousEspece, files in sousEspeces.items():
+                #print(espece + "," + sousEspece + "," + str(len(files)))
         return mapOfDowloadUrls
 
 def main():
     api = XenoCantoRestApi.XenoCantoRestApi()
     r = XenoCantoRestJsonApiResult(api)
-    r.getMapOfUrlFromJsonApi()
-    #r.createSpectrograme()
-    #r.openSpectrograme()
+    map = r.getMapOfUrlFromJsonApi()
+    api.downloadAllFilesFound(map)
     return 0
 
 if __name__ == '__main__':
